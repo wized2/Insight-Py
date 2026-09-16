@@ -6,6 +6,17 @@ from .analyzer import analyze_codebase
 from .reporter import generate_report
 
 def get_version():
+    """Resolve package version without requiring setup.py on disk (pip installs)."""
+    try:
+        from importlib.metadata import version as pkg_version
+        return pkg_version("insight-cli-sarang")
+    except Exception:
+        pass
+    try:
+        from importlib.metadata import version as pkg_version
+        return pkg_version("insight")
+    except Exception:
+        pass
     try:
         from . import __version__
         return __version__
@@ -15,8 +26,8 @@ def get_version():
     setup_py = here / "setup.py"
     if setup_py.exists():
         with open(setup_py, "r") as f:
-            content = f.read()
-            match = re.search(r"version=\"(.*?)\"", content)
+            text = f.read()
+            match = re.search(r'version\s*=\s*["\'](.*?)["\']', text)
             if match:
                 return match.group(1)
     return "0.2.6"
@@ -38,6 +49,7 @@ def main():
     analysis = analyze_codebase(args.path, limit=args.limit)
 
     print("Generating reports...")
+
     generate_report(analysis, args.output)
 
     print(f"Reports saved in {args.output}/")
