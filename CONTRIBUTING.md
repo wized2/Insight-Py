@@ -168,3 +168,5 @@ pytest tests/test_analyzer.py
 - **Security:** Please review our security policies and report vulnerabilities responsibly via [GitHub Security Advisories](https://github.com/ferrix-lab/Insight-Py/security).
 
 Thank you for helping make Insight better for developers worldwide.
+
+Prefer a virtualenv and `pip install -e ".[dev]"` for local work.
